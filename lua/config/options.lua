@@ -1,24 +1,21 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
+
 vim.opt.wrap = true
 
--- 2. WSL環境かどうかを判定します
+-- WSLでクリップボードを快適にする設定 (win32yank)
 if vim.fn.has("wsl") == 1 then
-  -- 3. クリップボードの動作をカスタマイズ（上書き）します
   vim.g.clipboard = {
-    name = "OSC 52", -- 任意の設定名
-
-    -- 4. コピー（ヤンク）時の挙動
+    name = "win32yank-wsl",
     copy = {
-      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+      ["+"] = "win32yank.exe -i --crlf",
+      ["*"] = "win32yank.exe -i --crlf",
     },
-
-    -- 5. 貼り付け（ペースト）時の挙動
     paste = {
-      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+      ["+"] = "win32yank.exe -o --lf",
+      ["*"] = "win32yank.exe -o --lf",
     },
+    cache_enabled = 0,
   }
 end
